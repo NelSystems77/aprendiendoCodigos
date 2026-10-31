@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="es"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Aprendiendo códigos</title>
+<title>Aprendiendo códigos by NelSystems 🐵✌🏻</title>
 <style>
 :root{--bg:#eef3f2;--sf:#fff;--ink:#14262b;--mut:#5b6e72;--ln:#d3dedc;--pre:#8a9a9d;--g:#1f4fd1;--n:#c2185b;--ok:#13795b;--no:#b3261e;--ac:#0f4c5c}
 @media(prefers-color-scheme:dark){:root{--bg:#0f1b1e;--sf:#172629;--ink:#e6f0ef;--mut:#9bb0b3;--ln:#2a3d41;--pre:#6f8588;--g:#7da2ff;--n:#ff7fae;--ok:#4cc9a0;--no:#ff8a80;--ac:#7fd1e0}}
@@ -37,6 +37,11 @@ hr{border:0;border-top:1px dashed var(--ln);margin:14px 0}
 .leg{display:flex;gap:14px;flex-wrap:wrap;font-size:.9rem;margin:10px 0}
 .seg{font:600 1.5rem ui-monospace,Menlo,monospace;text-align:center;letter-spacing:.04em;margin:10px 0}
 li{margin:6px 0}
+nav button{font-size:.88rem}
+.sc{display:flex;gap:6px;margin:8px 0}.sc button{flex:1}
+.fast .p{opacity:.35;font-size:.8em}.fast .cd{font-size:1.2rem}.fast .big .cd{font-size:2.5rem}
+.pre{opacity:.4;font-weight:500}
+.ip{display:flex;align-items:center;gap:8px}
 </style></head>
 <body><div class="w">
 <header>
@@ -44,6 +49,7 @@ li{margin:6px 0}
 <div class="top"><p class="mut" id="st"></p>
 <select id="dir" aria-label="Dirección de práctica"><option value="both">Ambas direcciones</option><option value="p">Producto → código</option><option value="c">Código → producto</option></select></div>
 <div class="bar"><i id="bf"></i></div>
+<div class="sc"><button data-s="">Los 336</button><button data-s="fast">30 rápidos</button></div>
 <div class="leg"><span><b class="p">1-10</b> prefijo</span><span><b class="g">16</b> grupo</span><span><b class="n">0010</b> número</span></div>
 </header>
 <nav id="tabs">
@@ -71,23 +77,29 @@ const $=s=>document.querySelector(s),e=s=>String(s).replace(/[&<>"]/g,c=>({'&':'
 const shuf=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
 let S={r:{},note:{},dir:'both'},cur='study';
 try{Object.assign(S,JSON.parse(localStorage.getItem('ac1')||'{}'))}catch(x){}
+const FAST=[["1-10-11-0030","Aspirina"],["1-10-16-0010","Paracetamol"],["1-10-16-6020","Paracetamol"],["1-10-16-6015","Paracetamol"],["1-10-02-0185","Amoxicilina"],["1-10-02-6205","Amoxicilina"],["1-10-13-1105","Lovastatina"],["1-10-07-0610","Enalapril 5 mg"],["1-10-08-0267","Enalapril 20 mg"],["1-10-08-0850","Hidroclorotiazida"],["1-10-08-0840","Hidralazina"],["1-10-39-0800","Glibenclamida"],["1-10-39-0805","Gliclazida"],["1-10-39-0900","Metformina"],["1-10-32-0695","Famotidina"],["1-10-13-0910","Hierro"],["1-10-13-0080","Ácido fólico"],["1-10-02-0290","Cefalexina"],["1-10-02-6440","Cefalexina"],["1-10-32-0890","Hidróxido de aluminio"],["1-10-32-7070","Hidróxido de aluminio"],["1-10-32-1275","Omeprazol"],["1-10-25-0370","Clorfenamina"],["1-10-25-6500","Clorfenamina"],["1-10-25-0525","Difenhidramina"],["1-10-25-6680","Difenhidramina"],["1-10-46-6390","Shampoo de brea"],["1-10-45-7200","Meticel"],["1-10-46-6180","Domeboro"],["1-10-51-6910","Gotas óticas (cerumen)"]];
+const FA=Object.fromEntries(FAST),FS=new Set(FAST.map(x=>x[0]));
+let SC=S.scope||'';
+const nmh=x=>SC&&FA[x[0]]?`<div class="nm">${e(FA[x[0]])}</div><div class="mut">${e(x[1])}</div>`:`<div class="nm">${e(x[1])}</div>`;
 const save=()=>{try{localStorage.setItem('ac1',JSON.stringify(S))}catch(x){}};
 const IV=[0,1,2,5,12,30],DAY=864e5;
 const cd=c=>{const p=c.split('-');return `<span class="cd"><b class="p">${p[0]}-${p[1]}</b>-<b class="g">${p[2]}</b>-<b class="n">${p[3]}</b></span>`};
 const dirs=()=>S.dir=='both'?['p','c']:[S.dir];
-const keys=()=>DS.flatMap(x=>dirs().filter(d=>d=='c'||dup[x[1]]==1).map(d=>x[0]+d));
+const keys=()=>(SC?DS.filter(x=>FS.has(x[0])):DS).flatMap(x=>dirs().filter(d=>d=='c'||dup[x[1]]==1).map(d=>x[0]+d));
 const nb=c=>`<textarea rows="2" placeholder="Tu truco: una historia, rima o imagen que una el producto con su número" oninput="S.note['${c}']=this.value;save()">${e(S.note[c]||'')}</textarea>`;
-const q=k=>{const x=B[k.slice(0,-1)];return k.slice(-1)=='p'?`<div class="nm">${e(x[1])}</div>`:`<div class="big">${cd(x[0])}</div>`};
-const a=k=>{const x=B[k.slice(0,-1)];return k.slice(-1)=='p'?`<div class="big">${cd(x[0])}</div>`:`<div class="nm">${e(x[1])}</div>`};
+const q=k=>{const x=B[k.slice(0,-1)];return k.slice(-1)=='p'?nmh(x):`<div class="big">${cd(x[0])}</div>`};
+const a=k=>{const x=B[k.slice(0,-1)];return k.slice(-1)=='p'?`<div class="big">${cd(x[0])}</div>`:nmh(x)};
 function rate(k,res){const r=S.r[k]||{b:0};if(res=='ok')r.b=Math.min(5,r.b+1);else if(res=='no')r.b=0;r.d=Date.now()+IV[r.b]*DAY;S.r[k]=r;save();head()}
-function head(){const ks=keys(),m=D.filter(x=>dirs().filter(d=>d=='c'||dup[x[1]]==1).every(d=>S.r[x[0]+d]&&S.r[x[0]+d].b>=3)).length,p=Object.keys(S.r).filter(k=>ks.includes(k)).length;
-$('#st').textContent=`Dominados ${m} de ${D.length} · en práctica ${p} tarjetas`;$('#bf').style.width=(m/D.length*100)+'%';$('#dir').value=S.dir}
+function head(){const ks=keys(),base=SC?D.filter(x=>FS.has(x[0])):D,m=base.filter(x=>dirs().filter(d=>d=='c'||dup[x[1]]==1).every(d=>S.r[x[0]+d]&&S.r[x[0]+d].b>=3)).length,p=Object.keys(S.r).filter(k=>ks.includes(k)).length;
+$('#st').textContent=`Dominados ${m} de ${base.length} · en práctica ${p} tarjetas`;$('#bf').style.width=(m/base.length*100)+'%';$('#dir').value=S.dir;document.querySelectorAll('[data-s]').forEach(b=>b.classList.toggle('on',b.dataset.s==SC))}
 let last='';
 function pick(d){const ks=keys().filter(k=>!d||k.slice(-1)==d&&k!=last);let t=0;const w=ks.map(k=>{const v=S.r[k]?6-S.r[k].b:3;t+=v;return v});let x=Math.random()*t;for(let i=0;i<ks.length;i++){x-=w[i];if(x<=0)return last=ks[i]}return last=ks[0]}
 function show(t){cur=t;document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t==t));({study:study,cards:startCards,quiz:()=>{QZ=null;quiz()},write:()=>{W=null;wr()}})[t]()}
 /* Explorar */
-function study(){$('#v').innerHTML=`<div class="pn"><h2>Aprende por familias</h2><p class="mut">Los productos de un mismo grupo comparten el bloque azul. Abre un grupo, léelo en voz alta y toca un producto para escribir tu truco.</p><input id="f" type="search" placeholder="Buscar producto o código" aria-label="Buscar"></div><div id="ls"></div>`;$('#f').oninput=ev=>list(ev.target.value);list('')}
-function list(f){f=f.toLowerCase().trim();const g={};DS.forEach(x=>{if(!f||x[1].toLowerCase().includes(f)||x[0].includes(f))(g[x[0].slice(0,7)]=g[x[0].slice(0,7)]||[]).push(x)});
+function study(){$('#v').innerHTML=`<div class="pn">${SC?'<h2>Tus 30 rápidos</h2><p class="mut">El 1-10 es igual en todos: ignóralo. Enfócate en los 6 dígitos finales (grupo + número). Toca un producto para escribir tu truco.</p>':'<h2>Aprende por familias</h2><p class="mut">Los productos de un mismo grupo comparten el bloque azul. Abre un grupo, léelo en voz alta y toca un producto para escribir tu truco.</p>'}<input id="f" type="search" placeholder="Buscar producto o código" aria-label="Buscar"></div><div id="ls"></div>`;$('#f').oninput=ev=>list(ev.target.value);list('')}
+function list(f){f=f.toLowerCase().trim();
+if(SC){$('#ls').innerHTML=FAST.filter(([c,n])=>!f||(n+B[c][1]+c).toLowerCase().includes(f)).map(([c,n])=>`<div class="it" onclick="this.nextElementSibling.hidden^=1"><span><b>${S.note[c]?'✎ ':''}${e(n)}</b><br><span class="mut">${e(B[c][1])}</span></span>${cd(c)}</div><div class="nt" hidden>${nb(c)}</div>`).join('')||'<p class="mut">Sin resultados.</p>';return}
+const g={};DS.forEach(x=>{if(!f||x[1].toLowerCase().includes(f)||x[0].includes(f))(g[x[0].slice(0,7)]=g[x[0].slice(0,7)]||[]).push(x)});
 $('#ls').innerHTML=Object.keys(g).map(k=>{const p=k.split('-');return `<details${f?' open':''}><summary><span class="cd"><b class="p">${p[0]}-${p[1]}</b>-<b class="g">${p[2]}</b></span><span class="mut">${g[k].length} producto${g[k].length>1?'s':''}</span></summary>${g[k].map(x=>`<div class="it" onclick="this.nextElementSibling.hidden^=1"><span>${S.note[x[0]]?'✎ ':''}${e(x[1])}</span>${cd(x[0])}</div><div class="nt" hidden>${nb(x[0])}</div>`).join('')}</details>`}).join('')||'<p class="mut">Sin resultados.</p>'}
 /* Tarjetas */
 let Q=[],flip=false;
@@ -98,20 +110,23 @@ function rt(res){const k=Q.shift();rate(k,res);if(res=='no')Q.push(k);else if(re
 /* Quiz */
 let QZ=null,sc={a:0,t:0,s:0};
 function quiz(){if(!QZ){const k=pick(),d=k.slice(-1),c=k.slice(0,-1),x=B[c],g=c.slice(0,7),ok=y=>y[0]!=c&&(d=='p'||y[1]!=x[1]);
-const pool=shuf(D.filter(y=>ok(y)&&y[0].slice(0,7)==g)).concat(shuf(D.filter(y=>ok(y)&&y[0].slice(0,7)!=g)));QZ={k,c,d,o:shuf([x].concat(pool.slice(0,3))),sel:-1}}
+const PL=SC?D.filter(y=>FS.has(y[0])):D,pool=shuf(PL.filter(y=>ok(y)&&y[0].slice(0,7)==g)).concat(shuf(PL.filter(y=>ok(y)&&y[0].slice(0,7)!=g)));QZ={k,c,d,o:shuf([x].concat(pool.slice(0,3))),sel:-1}}
 const z=QZ,lab=y=>z.d=='p'?cd(y[0]):e(y[1]);
 $('#v').innerHTML=`<div class="pn"><p class="mut">Aciertos ${sc.a} de ${sc.t} · racha ${sc.s}</p>${q(z.k)}${z.o.map((y,i)=>`<button class="op${z.sel>=0?(y[0]==z.c?' good':i==z.sel?' bad':''):''}" onclick="ans(${i})">${lab(y)}</button>`).join('')}${z.sel>=0?`${z.o[z.sel][0]!=z.c?`<hr><p class="mut">Era:</p>${cd(z.c)} ${e(B[z.c][1])}${nb(z.c)}`:''}<div class="row"><button class="pr" onclick="QZ=null;quiz()">Siguiente</button></div>`:''}</div>`}
 function ans(i){if(QZ.sel>=0)return;QZ.sel=i;const ok=QZ.o[i][0]==QZ.c;rate(QZ.k,ok?'ok':'no');sc.t++;if(ok){sc.a++;sc.s++}else sc.s=0;quiz()}
 /* Escribir */
 let W=null;
 const fmt=s=>{const d=s.replace(/\D/g,'').slice(0,9);let o=[],i=0;for(const n of [1,2,2,4]){if(i>=d.length)break;o.push(d.slice(i,i+n));i+=n}return o.join('-')};
+const fmt6=s=>{const d=s.replace(/\D/g,'').slice(0,6);return d.slice(0,2)+(d.length>2?'-'+d.slice(2):'')};
 function wr(){const v=$('#v');if(!W){const k=pick('p');if(!k){v.innerHTML='<div class="pn">No hay tarjetas de producto → código con la dirección elegida.</div>';return}W={k,h:0,res:null}}
-const c=W.k.slice(0,-1),p=c.split('-'),sg=[p[0],p[1],p[2],p[3]];
-const mask=sg.map((s,i)=>i<W.h?s:s.replace(/./g,'•')).join('-');
-v.innerHTML=`<div class="pn"><p class="mut">Escribe el código completo (los guiones se ponen solos)</p>${q(W.k)}${W.res?`<div class="seg">${W.res.map((r,i)=>`<span class="${r?'good':'bad'}" style="border:0">${sg[i]}</span>`).join('-')}</div><p class="${W.res.every(Boolean)?'good':'bad'}" style="border:0">${W.res.every(Boolean)?'Correcto':'Revisa los bloques en rojo'}</p>${nb(c)}<div class="row"><button class="pr" onclick="W=null;wr()">Siguiente</button></div>`:`<div class="seg" aria-label="Pista">${W.h?mask:''}</div><input id="wi" inputmode="numeric" autocomplete="off" placeholder="0-00-00-0000" aria-label="Código"><div class="row"><button onclick="W.h=Math.min(3,W.h+1);wr()">Pista</button><button class="pr" onclick="chk()">Comprobar</button></div>`}</div>`;
-const i=$('#wi');if(i){i.oninput=()=>i.value=fmt(i.value);i.onkeydown=ev=>{if(ev.key=='Enter')chk()};i.focus()}}
-function chk(){const v=fmt($('#wi').value).split('-'),p=W.k.slice(0,-1).split('-'),sg=[p[0],p[1],p[2],p[3]];W.res=sg.map((s,i)=>v[i]==s);rate(W.k,W.res.every(Boolean)?(W.h?'hard':'ok'):'no');wr()}
+const F=!!SC,c=W.k.slice(0,-1),p=c.split('-'),sg=F?[p[2],p[3]]:[p[0],p[1],p[2],p[3]],mh=F?1:3,pf=F?`<span class="cd pre">${p[0]}-${p[1]}-</span>`:'';
+const mask=sg.map((s,i)=>i<W.h?s:s.replace(/./g,'•')).join('-'),ok=W.res&&W.res.every(Boolean);
+v.innerHTML=`<div class="pn"><p class="mut">${F?'Escribe solo los 6 dígitos finales (el '+p[0]+'-'+p[1]+' ya está)':'Escribe el código completo (los guiones se ponen solos)'}</p>${q(W.k)}${W.res?`<div class="seg">${pf}${W.res.map((r,i)=>`<span class="${r?'good':'bad'}" style="border:0">${sg[i]}</span>`).join('-')}</div><p class="${ok?'good':'bad'}" style="border:0">${ok?'Correcto':'Revisa los bloques en rojo'}</p>${nb(c)}<div class="row"><button class="pr" onclick="W=null;wr()">Siguiente</button></div>`:`<div class="seg" aria-label="Pista">${W.h?pf+mask:''}</div><div class="${F?'ip':''}">${pf}<input id="wi" inputmode="numeric" autocomplete="off" placeholder="${F?'00-0000':'0-00-00-0000'}" aria-label="Código"></div><div class="row"><button onclick="W.h=Math.min(${mh},W.h+1);wr()">Pista</button><button class="pr" onclick="chk()">Comprobar</button></div>`}</div>`;
+const i=$('#wi');if(i){i.oninput=()=>i.value=(F?fmt6:fmt)(i.value);i.onkeydown=ev=>{if(ev.key=='Enter')chk()};i.focus()}}
+function chk(){const F=!!SC,v=(F?fmt6:fmt)($('#wi').value).split('-'),p=W.k.slice(0,-1).split('-'),sg=F?[p[2],p[3]]:[p[0],p[1],p[2],p[3]];W.res=sg.map((s,i)=>v[i]==s);rate(W.k,W.res.every(Boolean)?(W.h?'hard':'ok'):'no');wr()}
+function setScope(s){SC=s;S.scope=s;save();document.body.classList.toggle('fast',!!s);head();show(cur)}
 document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>show(b.dataset.t));
 $('#dir').onchange=ev=>{S.dir=ev.target.value;save();head();show(cur)};
+document.body.classList.toggle('fast',!!SC);document.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>setScope(b.dataset.s));
 head();show('study');
 </script></body></html>
